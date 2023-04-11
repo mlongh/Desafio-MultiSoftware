@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<FluxoDeCaixa.Models.Person>
-
+@{ 
+    var person = new Person();
+    
+}
 @{
     ViewData["Title"] = "Pessoas";
 }
@@ -7,62 +10,75 @@
 <h1>@ViewData["Title"] </h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Novo</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Salary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountLimit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MinimumValue)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Balance)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Salary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountLimit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MinimumValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Balance)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+<div class="col-md-4">
+    <form asp-route-id="@person.Name" asp-action="searchfilter" method="get" class="form-inline">
+        <input asp-for="@person.Name" class="form-control" />
+        <input class="btn btn-primary" type="submit" value="search" />
+    </form>
+    </div>
+<hr />
 
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Salary)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AccountLimit)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MinimumValue)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Balance)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Salary)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccountLimit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MinimumValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Balance)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>

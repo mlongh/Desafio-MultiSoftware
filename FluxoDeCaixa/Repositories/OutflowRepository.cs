@@ -7,11 +7,11 @@ using NHibernate;
 
 namespace FluxoDeCaixa.Repositories
 {
-    public class PersonRepository : IRepository<Person>
+    public class OutflowRepository : IRepository<Outflow>
     {
         private ISession _session;
-        public PersonRepository(ISession session) => _session = session;
-        public async Task Add(Person item)
+        public OutflowRepository(ISession session) => _session = session;
+        public async Task Add(Outflow item)
         {
             ITransaction transaction = null;
             try
@@ -31,23 +31,9 @@ namespace FluxoDeCaixa.Repositories
             }
         }
 
-        public IEnumerable<Person> FindAll() => _session.Query<Person>().ToList();
+        public IEnumerable<Outflow> FindAll() => _session.Query<Outflow>().ToList();
 
-        public List<Person> FindByName(string name)
-        {
-            var result = _session.Query<Person>().Where(p => p.Name == name);
-
-            return result.ToList();
-        }
-       
-        // public Task<Person> FindByName(string name)
-        //{
-            //var person = _session.Query<Person>().Where(p => p.Name == name);
-
-            //return person;
-        //}
-
-        public async Task<Person> FindByID(long id) => await _session.GetAsync<Person>(id);
+        public async Task<Outflow> FindByID(long id) => await _session.GetAsync<Outflow>(id);
 
         public async Task Remove(long id)
         {
@@ -55,7 +41,7 @@ namespace FluxoDeCaixa.Repositories
             try
             {
                 transaction = _session.BeginTransaction();
-                var item = await _session.GetAsync<Person>(id);
+                var item = await _session.GetAsync<Outflow>(id);
                 await _session.DeleteAsync(item);
                 await transaction.CommitAsync();
             }
@@ -70,7 +56,7 @@ namespace FluxoDeCaixa.Repositories
             }
         }
 
-        public async Task Update(Person item)
+        public async Task Update(Outflow item)
         {
             ITransaction transaction = null;
             try

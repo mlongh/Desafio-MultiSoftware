@@ -7,11 +7,12 @@ using NHibernate;
 
 namespace FluxoDeCaixa.Repositories
 {
-    public class PersonRepository : IRepository<Person>
+    public class InflowRepository : IRepository<Inflow>
     {
         private ISession _session;
-        public PersonRepository(ISession session) => _session = session;
-        public async Task Add(Person item)
+        public InflowRepository(ISession session) => _session = session;
+
+        public async Task Add(Inflow item)
         {
             ITransaction transaction = null;
             try
@@ -31,23 +32,9 @@ namespace FluxoDeCaixa.Repositories
             }
         }
 
-        public IEnumerable<Person> FindAll() => _session.Query<Person>().ToList();
+        public IEnumerable<Inflow> FindAll() => _session.Query<Inflow>().ToList();
 
-        public List<Person> FindByName(string name)
-        {
-            var result = _session.Query<Person>().Where(p => p.Name == name);
-
-            return result.ToList();
-        }
-       
-        // public Task<Person> FindByName(string name)
-        //{
-            //var person = _session.Query<Person>().Where(p => p.Name == name);
-
-            //return person;
-        //}
-
-        public async Task<Person> FindByID(long id) => await _session.GetAsync<Person>(id);
+        public async Task<Inflow> FindByID(long id) => await _session.GetAsync<Inflow>(id);
 
         public async Task Remove(long id)
         {
@@ -55,7 +42,7 @@ namespace FluxoDeCaixa.Repositories
             try
             {
                 transaction = _session.BeginTransaction();
-                var item = await _session.GetAsync<Person>(id);
+                var item = await _session.GetAsync<Inflow>(id);
                 await _session.DeleteAsync(item);
                 await transaction.CommitAsync();
             }
@@ -70,7 +57,7 @@ namespace FluxoDeCaixa.Repositories
             }
         }
 
-        public async Task Update(Person item)
+        public async Task Update(Inflow item)
         {
             ITransaction transaction = null;
             try

@@ -22,6 +22,14 @@ namespace FluxoDeCaixa.Controllers
             return View(personRepository.FindAll().ToList());
         }
 
+        [HttpGet]
+        public ActionResult SearchFilter(Person person)
+        {
+            var personReturn =  personRepository.FindByName(person.Name);
+            return View("Index", personReturn);
+        }
+
+
         // GET: PersonController/Details/5
         public async Task<ActionResult> Details(long? id)
         {
@@ -41,6 +49,7 @@ namespace FluxoDeCaixa.Controllers
         // GET: PersonController/Create
         public ActionResult Create()
         {
+            
             return View();
         }
 
@@ -104,7 +113,6 @@ namespace FluxoDeCaixa.Controllers
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-
             return View(person);
         }
 

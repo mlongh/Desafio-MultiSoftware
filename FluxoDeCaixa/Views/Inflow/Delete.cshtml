@@ -1,0 +1,48 @@
+﻿@model FluxoDeCaixa.Models.Inflow
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Excluir</h1>
+
+<h3>Tem certeza que deseja excluir?</h3>
+<div>
+    <h4>Inflow</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.InflowDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InflowDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.InflowDescription)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InflowDescription)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.InflowAmount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InflowAmount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Person.Id)
+        </dt>
+
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="submit" value="Excluir" class="btn btn-danger" /> |
+        <a asp-action="Index">Voltar</a>
+    </form>
+</div>

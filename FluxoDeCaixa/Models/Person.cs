@@ -8,7 +8,8 @@ namespace FluxoDeCaixa.Models
 {
     public class Person
     {
-        public virtual long? Id { get; set; }
+        [Display(Name = "Código")]
+        public virtual long Id { get; set; }
 
         [Display(Name = "Nome")]
         public virtual string Name { get; set; }
@@ -23,6 +24,8 @@ namespace FluxoDeCaixa.Models
 
         [Display(Name = "Valor mínimo em conta")]
         public virtual double MinimumValue { get; set; }
+
+        [Display(Name = "Saldo")]
         public virtual double Balance { get; set; }
 
         public Person()
@@ -38,6 +41,8 @@ namespace FluxoDeCaixa.Models
             AccountLimit = accountLimit;
             MinimumValue = minimumValue;
         }
+
+        
     }
 
 }

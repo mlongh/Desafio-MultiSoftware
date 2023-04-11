@@ -1,0 +1,58 @@
+﻿@model IEnumerable<FluxoDeCaixa.Models.Inflow>
+
+@{
+    ViewData["Title"] = "Entradas";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p>
+    <a asp-action="Create">Novo</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Pessoa
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InflowDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InflowAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InflowDescription)
+            </th>
+
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Person.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InflowDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InflowAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InflowDescription)
+            </td>
+
+            <td>
+
+                <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
+                <button asp-action="Delete" asp-route-id="@item.Id" class="btn btn-link disabled">Excluir</button>
+            </td>
+        </tr>
+        }
+    </tbody>
+
+</table>

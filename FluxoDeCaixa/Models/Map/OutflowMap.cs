@@ -12,10 +12,10 @@ namespace FluxoDeCaixa.Models.Map
     {
         public OutflowMap()
         {
-            Id(x => x.OutflowCode, x =>
+            Id(x => x.Id, x =>
             {
-                x.Generator(Generators.UUIDString);
-                x.Type(NHibernateUtil.String);
+                x.Generator(Generators.Increment);
+                x.Type(NHibernateUtil.Int64);
                 x.Column("Id");
             });
 
@@ -37,6 +37,12 @@ namespace FluxoDeCaixa.Models.Map
                 x.Type(NHibernateUtil.Double);
                 x.Scale(2);
                 x.Precision(15);
+                x.NotNullable(true);
+            });
+
+            ManyToOne(x => x.Person, x =>
+            {
+                x.Column("PES_Id");
                 x.NotNullable(true);
             });
 

@@ -12,5 +12,9 @@ namespace FluxoDeCaixa.Repositories
         Task Update(T item);
         Task<T> FindByID(long id);
         IEnumerable<T> FindAll();
+
+        
+           //var  person = PersonRepository.FindById()
+            //Inflow.person = person
     }
 }

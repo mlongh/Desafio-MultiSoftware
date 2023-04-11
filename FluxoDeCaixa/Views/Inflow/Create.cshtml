@@ -1,0 +1,57 @@
+﻿@model FluxoDeCaixa.Models.ViewModels.InflowFormViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Inflow</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+
+                <input asp-for="Inflow.Id" class="form-control" hidden />
+                <span asp-validation-for="Inflow.Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Inflow.InflowDate" class="control-label"></label>
+                <input asp-for="Inflow.InflowDate" class="form-control" />
+                <span asp-validation-for="Inflow.InflowDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Inflow.InflowDescription" class="control-label"></label>
+                <input asp-for="Inflow.InflowDescription" class="form-control" />
+                <span asp-validation-for="Inflow.InflowDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Inflow.InflowAmount" class="control-label"></label>
+                <input asp-for="Inflow.InflowAmount" class="form-control" />
+                <span asp-validation-for="Inflow.InflowAmount" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <select asp-for="Inflow.Person.Id" class="form-control">
+                    @foreach (var obj in Model.People)
+                    {
+
+                        <option value="@obj.Id" class="form-control">@obj.Name</option>
+
+                    }
+                </select>
+            </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Adicionar" class="btn btn-primary" />
+                </div>
+            </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Voltar</a>
+</div>
+

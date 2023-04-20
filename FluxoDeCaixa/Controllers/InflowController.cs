@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluxoDeCaixa.Repositories;
 using FluxoDeCaixa.Models.ViewModels;
-using System.Globalization;
 
 namespace FluxoDeCaixa.Controllers
 {
@@ -25,25 +24,8 @@ namespace FluxoDeCaixa.Controllers
         // GET: PersonController
         public ActionResult Index()
         {
-            ViewBag.Total = inflowRepository.SumAmount().ToString("C2", CultureInfo.CurrentCulture);
-            return View("Index", inflowRepository.FindAll().ToList());
+            return View(inflowRepository.FindAll().ToList());
         }
-
-        [HttpGet]
-        public ActionResult SearchFilter(Filter filter)
-        {
-            var returnFilter = inflowRepository.SearchFilter(filter);
-            double sum = 0;
-            foreach(var inflow in returnFilter)
-            {
-                sum += inflow.InflowAmount;
-            }
-            ViewBag.Total = sum.ToString("C2", CultureInfo.CurrentCulture);
-
-            return View("Index", returnFilter.ToList());
-        }
-
-
 
         // GET: PersonController/Details/5
         public async Task<ActionResult> Details(long? id)
@@ -84,7 +66,7 @@ namespace FluxoDeCaixa.Controllers
 
             return RedirectToAction("Index");
         }
-
+       
         // GET: PersonController/Delete/5
         public async Task<ActionResult> Delete(long? id)
         {
@@ -111,7 +93,7 @@ namespace FluxoDeCaixa.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(long id)
         {
-
+          
             await inflowRepository.Remove(id);
             return RedirectToAction("Index");
         }

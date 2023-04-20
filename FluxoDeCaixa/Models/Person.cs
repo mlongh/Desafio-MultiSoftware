@@ -14,23 +14,18 @@ namespace FluxoDeCaixa.Models
         [Display(Name = "Nome")]
         public virtual string Name { get; set; }
 
-        [DataType(DataType.EmailAddress)]
         public virtual string Email { get; set; }
 
         [Display(Name = "Salário")]
-        [DataType(DataType.Currency)]
-        public virtual double? Salary { get; set; }
+        public virtual double Salary { get; set; }
 
         [Display(Name = "Limite da Conta")]
-        [DataType(DataType.Currency)]
-        public virtual double? AccountLimit { get; set; }
+        public virtual double AccountLimit { get; set; }
 
         [Display(Name = "Valor mínimo em conta")]
-        [DataType(DataType.Currency)]
         public virtual double MinimumValue { get; set; }
 
         [Display(Name = "Saldo")]
-        [DataType(DataType.Currency)]
         public virtual double Balance { get; set; }
 
         public Person()

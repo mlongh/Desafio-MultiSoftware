@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -40,6 +40,12 @@ namespace FluxoDeCaixa.Repositories
             return result.ToList();
         }
        
+        // public Task<Person> FindByName(string name)
+        //{
+            //var person = _session.Query<Person>().Where(p => p.Name == name);
+
+            //return person;
+        //}
 
         public async Task<Person> FindByID(long id) => await _session.GetAsync<Person>(id);
 

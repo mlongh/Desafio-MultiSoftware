@@ -14,8 +14,8 @@ namespace FluxoDeCaixa.Controllers
     {
         private readonly OutflowRepository outflowRepository;
         private readonly PersonRepository personRepository;
-        public OutflowController(NHibernate.ISession session)
-        {
+        public OutflowController(NHibernate.ISession session) 
+        { 
             outflowRepository = new OutflowRepository(session);
             personRepository = new PersonRepository(session);
         }
@@ -24,14 +24,6 @@ namespace FluxoDeCaixa.Controllers
         public ActionResult Index()
         {
             return View(outflowRepository.FindAll().ToList());
-        }
-
-
-        [HttpGet]
-        public ActionResult SearchFilter(Filter filter)
-        {
-            var returnFilter = outflowRepository.SearchFilter(filter);
-            return View("Index", returnFilter.ToList());
         }
 
         // GET: PersonController/Details/5
@@ -71,23 +63,10 @@ namespace FluxoDeCaixa.Controllers
             if (person.Balance < 0)
             {
                 ViewBag.msg = "Saldo insuficiente para realizar operação";
-                ViewBag.text = "Saldo abaixo de 0";
                 OutflowFormViewModel outflowFormViewModel = new OutflowFormViewModel() { };
                 outflowFormViewModel.People = personRepository.FindAll().ToList();
-                return View("Create", outflowFormViewModel);
+                return View("Create",outflowFormViewModel);
             }
-
-            if (person.Balance < person.MinimumValue)
-            {
-                ViewBag.msgMin = "Saldo abaixo do mínimo";
-                ViewBag.text = "Saldo abaixo do mínimo cadastrado";
-                OutflowFormViewModel outflowFormViewModel = new OutflowFormViewModel() { };
-                outflowFormViewModel.People = personRepository.FindAll().ToList();
-                await outflowRepository.Add(outflow);
-                await personRepository.Update(person);
-                return View("Create", outflowFormViewModel);
-            }
-
             await outflowRepository.Add(outflow);
             await personRepository.Update(person);
             return RedirectToAction("Index");

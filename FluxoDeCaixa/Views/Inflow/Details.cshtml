@@ -1,21 +1,15 @@
 ﻿@model FluxoDeCaixa.Models.Inflow
 
 @{
-    ViewData["Title"] = "Detalhes";
+    ViewData["Title"] = "Details";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>Details</h1>
 
 <div>
-    <h4>Saída</h4>
+    <h4>Inflow</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Person.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Person.Name)
-        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Id)
         </dt>
@@ -40,7 +34,9 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.InflowAmount)
         </dd>
-
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Person.Name)
+        </dt>
     </dl>
 </div>
 <div>

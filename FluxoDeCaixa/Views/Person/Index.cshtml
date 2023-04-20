@@ -9,18 +9,20 @@
 
 <h1>@ViewData["Title"] </h1>
 
-<p>
-    <a asp-action="Create">Novo</a>
-</p>
-<div class="col-md-4">
-    <form asp-route-id="@person.Name" asp-action="searchfilter" method="get" class="form-inline">
-        <input asp-for="@person.Name" class="form-control" />
-        <input class="btn btn-primary" type="submit" value="search" />
-    </form>
-    </div>
-<hr />
+<div class="d-flex justify-content-between">
 
-    <table class="table">
+    <p>
+        <a asp-action="Create">Novo</a>
+    </p>
+    <div>
+        <form asp-route-id="@person.Name" asp-action="searchfilter" method="get" class="form-inline">
+            <input placeholder="Nome" asp-for="@person.Name" class="form-control m-1" />
+            <input class="btn btn-primary" type="submit" value="Pesquisar" />
+        </form>
+    </div>
+</div>
+<hr />
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th>

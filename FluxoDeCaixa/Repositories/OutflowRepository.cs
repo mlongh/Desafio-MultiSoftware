@@ -7,7 +7,7 @@ using NHibernate;
 
 namespace FluxoDeCaixa.Repositories
 {
-    public class OutflowRepository : IRepository<Outflow>
+    public class OutflowRepository
     {
         private ISession _session;
         public OutflowRepository(ISession session) => _session = session;
@@ -31,7 +31,31 @@ namespace FluxoDeCaixa.Repositories
             }
         }
 
-        public IEnumerable<Outflow> FindAll() => _session.Query<Outflow>().ToList();
+        public List<Outflow> FindAll() => _session.Query<Outflow>().ToList();
+
+        //Filtros
+
+        //Filtro de pesquisa
+
+        public List<Outflow> SearchFilter(Filter filter)
+        {
+            var result = _session.Query<Outflow>();
+
+            result = _session.Query<Outflow>().Where(i =>
+            i.Person.Name.Contains(filter.Name != null ? filter.Name : "[a-zA-Z]") &&
+            i.OutflowDate >= (filter.Periodo > 0 ?
+                filter.Periodo == 1 ? DateTime.Now.AddDays(-7) :
+                filter.Periodo == 2 ? DateTime.Now.AddDays(-15) :
+                filter.Periodo == 3 ? DateTime.Now.AddDays(-30) :
+                filter.MinDate : filter.MinDate) &&
+            i.OutflowDate <= (filter.Periodo > 0 ? DateTime.Now : filter.MaxDate != DateTime.MinValue ? filter.MaxDate : DateTime.MaxValue)
+            );
+
+            return result.ToList();
+        }
+
+        //Filtro por períodos
+
 
         public async Task<Outflow> FindByID(long id) => await _session.GetAsync<Outflow>(id);
 

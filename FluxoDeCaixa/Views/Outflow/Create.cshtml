@@ -1,28 +1,49 @@
 ﻿@model FluxoDeCaixa.Models.ViewModels.OutflowFormViewModel
-    
+
 @{
     ViewData["Title"] = "Adicionar saída";
 }
 
-<h1>@ViewData["Title"]</h1>
+
+<h1 class="d-flex justify-content-between"><p>@ViewData["Title"]</p> 
+    Saldo:  </h1>
 
 @{
     if (ViewBag.msg != null && ViewBag.msg != "")
     {
-        <h2>
-            @ViewBag.msg
-        </h2>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-          Swal.fire('@ViewBag.msg')
+            Swal.fire({
+                title: '@ViewBag.msg',
+                text: '@ViewBag.text',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+
+        </script>
+    }    
+    
+    if (ViewBag.msgMin != null && ViewBag.msgMin != "")
+    {
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                title: '@ViewBag.msgMin',
+                text: '@ViewBag.text',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            }).then((result) => {
+                window.location.href = '/Outflow';
+            })
         </script>
     }
+
 }
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form id="form" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Outflow.Id" class="control-label" hidden></label>
@@ -40,19 +61,20 @@
             </div>
             <div class="form-group">
                 <label asp-for="Outflow.OutflowAmount" class="control-label"></label>
-                <input asp-for="Outflow.OutflowAmount" class="form-control" />
+                <input value="0" asp-for="Outflow.OutflowAmount" class="form-control" />
                 <span asp-validation-for="Outflow.OutflowAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <select asp-for="Outflow.Person.Id" class="form-control">
+                <select id="select" asp-for="Outflow.Person.Id" class="form-control">
                     @foreach (var obj in Model.People)
                     {
                         <option value="@obj.Id" class="form-control">@obj.Name</option>
                     }
                 </select>
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Adicionar" class="btn btn-primary" />
+                <input id="loginForm" type="submit" value="Adicionar" class="btn btn-primary"/>
             </div>
         </form>
     </div>
@@ -62,3 +84,17 @@
     <a asp-action="Index">Voltar</a>
 </div>
 
+@*<script>
+
+    function Teste() {
+        debugger;
+        if (@Model.Outflow?.Person?.Balance - @Model.Outflow?.OutflowAmount < @Model.Outflow?.Person?.MinimumValue) {
+            alert('aaaaaaaaaa');
+        }
+
+        document.getElementById('form').onsubmit(
+            {
+
+            }
+    }
+</script>*@

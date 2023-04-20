@@ -7,7 +7,7 @@ using NHibernate;
 
 namespace FluxoDeCaixa.Repositories
 {
-    public class InflowRepository : IRepository<Inflow>
+    public class InflowRepository
     {
         private ISession _session;
         public InflowRepository(ISession session) => _session = session;
@@ -32,9 +32,36 @@ namespace FluxoDeCaixa.Repositories
             }
         }
 
-        public IEnumerable<Inflow> FindAll() => _session.Query<Inflow>().ToList();
+        public List<Inflow> FindAll() => _session.Query<Inflow>().ToList();
+
+        //Filtros
+
+        //Filtro de pesquisa
+        public List<Inflow> SearchFilter(Filter filter)
+        {
+            var result = _session.Query<Inflow>();
+
+            result = _session.Query<Inflow>().Where(i =>
+            i.Person.Name.Contains(filter.Name != null ? filter.Name : "[a-zA-Z]") &&
+            i.InflowDate >= (filter.Periodo > 0 ?
+                filter.Periodo == 1 ? DateTime.Now.AddDays(-7) :
+                filter.Periodo == 2 ? DateTime.Now.AddDays(-15) :
+                filter.Periodo == 3 ? DateTime.Now.AddDays(-30) :
+                filter.MinDate : filter.MinDate) &&
+            i.InflowDate <= (filter.Periodo > 0 ? DateTime.Now : filter.MaxDate != DateTime.MinValue ? filter.MaxDate : DateTime.MaxValue)
+            );
+
+            return result.ToList();
+        }
+
+       public double SumAmount()
+        {
+            return _session.Query<Inflow>().Sum(i => i.InflowAmount);
+        }
 
         public async Task<Inflow> FindByID(long id) => await _session.GetAsync<Inflow>(id);
+
+
 
         public async Task Remove(long id)
         {

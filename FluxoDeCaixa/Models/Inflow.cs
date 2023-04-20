@@ -8,20 +8,25 @@ namespace FluxoDeCaixa.Models
 {
     public class Inflow
     {
+
+        [Display(Name = "Código da operação")]
         public virtual long Id { get; set; }
 
         [Display(Name = "Data")]
+        [DataType(DataType.Date)]
         public virtual DateTime InflowDate { get; set; }
 
         [Display(Name = "Descrição")]
         public virtual string InflowDescription { get; set; }
 
         [Display(Name = "Valor")]
+        [DataType(DataType.Currency)]
         public virtual double InflowAmount { get; set; }
 
         [Display(Name = "Pessoa")]
         public virtual Person Person { get; set; }
 
+        public virtual Filter Filter { get; set; }
         public Inflow()
         {
         }
@@ -33,6 +38,9 @@ namespace FluxoDeCaixa.Models
             InflowDescription = inflowDescription;
             InflowAmount = inflowAmount;
         }
+
+   
+
     }
 
    

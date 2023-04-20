@@ -37,7 +37,7 @@ namespace FluxoDeCaixa.Models.Map
                 x.Type(NHibernateUtil.Double);
                 x.Scale(2);
                 x.Precision(15);
-                x.NotNullable(true);
+                x.NotNullable(false);
             });
 
             Property(b => b.AccountLimit, x =>
@@ -45,7 +45,7 @@ namespace FluxoDeCaixa.Models.Map
                 x.Type(NHibernateUtil.Double);
                 x.Scale(2);
                 x.Precision(15);
-                x.NotNullable(true);
+                x.NotNullable(false);
             });
             Property(b => b.MinimumValue, x =>
             {

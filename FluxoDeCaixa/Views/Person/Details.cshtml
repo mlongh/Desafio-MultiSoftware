@@ -1,13 +1,14 @@
-﻿@model FluxoDeCaixa.Models.Person
+﻿@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
-@{
-    ViewData["Title"] = "Detalhes";
-}
+@model FluxoDeCaixa.Models.Person
+
+@{ ViewData["Title"] = "Detalhes Conta"; }
 
 <h1> @ViewData["Title"]</h1>
 
 <div>
-    <h4>Pessoas</h4>
     <hr />
     <dl class="row">
 
@@ -55,7 +56,16 @@
         </dd>
     </dl>
 </div>
+
+@{ var person = JsonSerializer.Deserialize<Person>(HttpContextAccessor.HttpContext.Session.GetString("User"));
+    if (person.Id == 1)
+    {
 <div>
-    @Html.ActionLink("Editar", "Editar", new { id = Model.Id }) |
-    <a asp-action="Index">Voltar</a>
+    <a class="btn btn-outline-primary" asp-action="Index">Voltar</a>
+</div> }
+ else
+{
+<div>
+    <a class="btn btn-outline-primary" asp-action="Index" hidden>Voltar</a>
 </div>
+ } }

@@ -1,75 +1,82 @@
-﻿@model IEnumerable<FluxoDeCaixa.Models.Outflow>
+﻿@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
-@{ 
+@model IEnumerable<FluxoDeCaixa.Models.Outflow>
+
+@{
     var filter = new Filter();
     var outflow = new Outflow();
 }
 
 @{
-    ViewData["Title"] = "Saídas";
+    ViewData["Title"] = "Saques";
 }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
 
-<h1>@ViewData["Title"]</h1>
 
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between align-items-center">
 
-    <p>
-        <a asp-action="Create">Novo</a>
-    </p>
+    <h1>@ViewData["Title"] (@ViewBag.Count)</h1>
+    
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Filtros
-    </button>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Filtros</h5>
-                </div>
-                <div class="modal-body">
-                    <label class="col-form-label">Pesquisa</label>
-                    <form asp-route-periodo="@filter.Periodo" asp-route-name="@filter?.Name" asp-route-mindate="@filter.MinDate" asp-route-maxdate="@filter.MaxDate" asp-action="SearchFilter" method="get" class="form-group">
+    <div class="d-flex justify-content-center">
 
-                        <input placeholder="Nome" asp-for="@filter.Name" class="form-control" />
+        <a asp-action="Create" class="d-flex btn btn-success justify-content-center align-items-center m-1"> <i class="bi bi-plus"></i>Novo </a>
 
-                        <div class="form-row">
-                            <div class="col">
-                                <label class="col-form-label">De</label>
-                                <input asp-for="@filter.MinDate" class="form-control " value="0000-00-00" />
-                            </div>
-                            <div class="col">
-                                <label class="col-form-label">Até</label>
-                                <input asp-for="@filter.MaxDate" class="form-control" value="0000-00-00" />
-                            </div>
+        <button type="button" class="btn btn-outline-primary m-1" data-toggle="modal" data-target="#exampleModal">
+            <i class="bi bi-funnel-fill"></i>
+        </button>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Filtros</h5>
+            </div>
+            <div class="modal-body">
+                <label class="col-form-label">Pesquisa</label>
+                <form asp-route-periodo="@filter.Periodo" asp-route-name="@filter?.Name" asp-route-mindate="@filter.MinDate" asp-route-maxdate="@filter.MaxDate" asp-action="SearchFilter" method="get" class="form-group">
+
+                    <input placeholder="Nome" asp-for="@filter.Name" class="form-control" />
+
+                    <div class="form-row">
+                        <div class="col">
+                            <label class="col-form-label">De</label>
+                            <input asp-for="@filter.MinDate" class="form-control " value="0000-00-00" />
                         </div>
-
-                        <label class="col-form-label"> Períodos</label>
-                        <select id="select" asp-for="@filter.Periodo" class="form-control">
-
-                            <option value="0" selected class="form-control">Todos</option>
-                            <option value="1"  class="form-control">Últimos 7 dias</option>
-                            <option value="2"  class="form-control">Últimos 15 dias</option>
-                            <option value="3"  class="form-control">Últimos 30 dias</option>
-
-                        </select>
-                        <input class="btn btn-primary btn-block mt-3" type="submit" value="Pesquisar" />
-                        <div class="form-group">
-
+                        <div class="col">
+                            <label class="col-form-label">Até</label>
+                            <input asp-for="@filter.MaxDate" class="form-control" value="0000-00-00" />
                         </div>
-                    </form>
+                    </div>
+
+                    <label class="col-form-label"> Períodos</label>
+                    <select id="select" asp-for="@filter.Periodo" class="form-control">
+
+                        <option value="0" selected class="form-control">Todos</option>
+                        <option value="1" class="form-control">Últimos 7 dias</option>
+                        <option value="2" class="form-control">Últimos 15 dias</option>
+                        <option value="3" class="form-control">Últimos 30 dias</option>
+
+                    </select>
+                    <input class="btn btn-primary btn-block mt-3" type="submit" value="Pesquisar" />
+                    <div class="form-group">
+
+                    </div>
+                </form>
 
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-<hr />
-
-<table class="table table-hover">
+<br />
+<table class="table table-hover m-1">
     <thead>
         <tr>
             <th>
@@ -78,11 +85,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.OutflowDate)
             </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.OutflowAmount)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.OutflowDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OutflowAmount)
+                @Html.DisplayNameFor(model => model.Person.Balance)
             </th>
             <th></th>
         </tr>
@@ -90,24 +101,47 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Person.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OutflowDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OutflowDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OutflowAmount)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-link disabled">Excluir</a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Person.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OutflowDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OutflowAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OutflowDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Person.Balance)
+                </td>
+                <td class="d-flex justify-content-center align-items-center">
+                    <a class="btn-link m-1" asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a class="btn-link m-1" asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                </td>
+            </tr>
         }
     </tbody>
+
+    @{ var person = JsonSerializer.Deserialize<Person>(HttpContextAccessor.HttpContext.Session.GetString("User"));
+        if (person.Id == 1)
+        {
+            <tfoot>
+                <tr class="table-active">
+                    <th scope="row">Total de saídas</th>
+                    <td>@ViewBag.Total</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        }
+        else
+        {
+    <div></div>
+        } }
+
 </table>

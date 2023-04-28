@@ -32,11 +32,22 @@ namespace FluxoDeCaixa.Repositories
         }
 
         public List<Outflow> FindAll() => _session.Query<Outflow>().ToList();
+        public List<Outflow> FindAllById(long id) => _session.Query<Outflow>().Where(x => x.Person.Id == id).ToList();
 
         //Filtros
 
         //Filtro de pesquisa
+        public string CountAllOutflows()
+        {
+           var count =  _session.Query<Outflow>().Count();
+            return count.ToString();
+        }
 
+        public string CountUserOutflows(long id)
+        {
+            var count = _session.Query<Outflow>().Where(x => x.Person.Id == id).Count();
+            return count.ToString();
+        }
         public List<Outflow> SearchFilter(Filter filter)
         {
             var result = _session.Query<Outflow>();
@@ -54,7 +65,10 @@ namespace FluxoDeCaixa.Repositories
             return result.ToList();
         }
 
-        //Filtro por períodos
+        public double SumAmount()
+        {
+            return _session.Query<Outflow>().Sum(i => i.OutflowAmount);
+        }
 
 
         public async Task<Outflow> FindByID(long id) => await _session.GetAsync<Outflow>(id);

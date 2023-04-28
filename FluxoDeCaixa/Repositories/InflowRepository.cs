@@ -34,6 +34,18 @@ namespace FluxoDeCaixa.Repositories
 
         public List<Inflow> FindAll() => _session.Query<Inflow>().ToList();
 
+        public string CountAllInflows()
+        {
+            var count = _session.Query<Inflow>().Count();
+            return count.ToString();
+        }
+
+        public string CountUserInflows(long id)
+        {
+            var count = _session.Query<Inflow>().Where(x => x.Person.Id == id).Count();
+            return count.ToString();
+        }
+
         //Filtros
 
         //Filtro de pesquisa
@@ -61,7 +73,7 @@ namespace FluxoDeCaixa.Repositories
 
         public async Task<Inflow> FindByID(long id) => await _session.GetAsync<Inflow>(id);
 
-
+        public List<Inflow> FindAllById(long id) => _session.Query<Inflow>().Where(x => x.Person.Id == id).ToList();
 
         public async Task Remove(long id)
         {

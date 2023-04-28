@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FluxoDeCaixa.Repositories;
 using FluxoDeCaixa.Models.ViewModels;
 using System.Globalization;
+using System.Text.Json;
 
 namespace FluxoDeCaixa.Controllers
 {
@@ -16,17 +17,32 @@ namespace FluxoDeCaixa.Controllers
 
         private readonly InflowRepository inflowRepository;
         private readonly PersonRepository personRepository;
-        public InflowController(NHibernate.ISession session)
+        private readonly Microsoft.AspNetCore.Http.IHttpContextAccessor _contxt;
+        public InflowController(NHibernate.ISession session, Microsoft.AspNetCore.Http.IHttpContextAccessor contxt)
         {
             inflowRepository = new InflowRepository(session);
             personRepository = new PersonRepository(session);
+            _contxt = contxt;
         }
 
         // GET: PersonController
         public ActionResult Index()
         {
-            ViewBag.Total = inflowRepository.SumAmount().ToString("C2", CultureInfo.CurrentCulture);
-            return View("Index", inflowRepository.FindAll().ToList());
+            var pessoa = JsonSerializer.Deserialize<Person>(_contxt.HttpContext.Session.GetString("User"));
+
+            if (pessoa.Id == 1)
+            {
+                ViewBag.Total = inflowRepository.SumAmount().ToString("C2", CultureInfo.CurrentCulture);
+                ViewBag.Count = inflowRepository.CountAllInflows();
+                return View(inflowRepository.FindAll().ToList());
+
+            }
+            else
+            {
+                ViewBag.Total = inflowRepository.SumAmount().ToString("C2", CultureInfo.CurrentCulture);
+                ViewBag.Count = inflowRepository.CountUserInflows(pessoa.Id);
+                return View(inflowRepository.FindAllById(pessoa.Id).ToList());
+            }
         }
 
         [HttpGet]
@@ -47,12 +63,14 @@ namespace FluxoDeCaixa.Controllers
 
         // GET: PersonController/Details/5
         public async Task<ActionResult> Details(long? id)
-        {
+        { 
             if (id == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
+
             Inflow inflow = await inflowRepository.FindByID(id.Value);
+            
             if (inflow == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
@@ -83,6 +101,41 @@ namespace FluxoDeCaixa.Controllers
             await personRepository.Update(person);
 
             return RedirectToAction("Index");
+        }
+
+        // GET: PersonController/Edit/5
+        public async Task<ActionResult> Edit(long? id)
+        {
+            if (id == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+            Inflow inflow = await inflowRepository.FindByID(id.Value);
+            if (inflow == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            return View(inflow);
+        }
+
+        // POST: PersonController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(
+            Inflow inflow)
+        {
+            if (ModelState.IsValid)
+            {
+                var antigo = await inflowRepository.FindByID(inflow.Id);
+                antigo.InflowDate = inflow.InflowDate;
+                antigo.InflowDescription = inflow.InflowDescription;
+                
+                await inflowRepository.Update(antigo);
+                return RedirectToAction("Index");
+            }
+
+            return View(inflow);
         }
 
         // GET: PersonController/Delete/5

@@ -1,0 +1,81 @@
+﻿@model FluxoDeCaixa.Models.Person
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "";
+
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" charset="UTF-8">></script>
+
+</head>
+
+@{ if (ViewBag.Message != null && ViewBag.Message != "")
+    {
+    
+        <h1 hidden>@ViewBag.Message</h1>
+        <script>
+            debugger;
+            Swal.fire({
+                position: 'top-center',
+                icon: 'error',
+                title: '@ViewBag.Message',
+                text: 'Tente Novamente!',
+                showConfirmButton: false,
+                timer: 1700,
+               
+
+            })
+
+        </script>
+    } }
+
+<hr />
+<div class="container">
+    <h1 class="display-4">FluxoDeCaixa</h1>
+    <h5 class="title">Entrar</h5>
+    <div class="form-container">
+        <form asp-action="Logar" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Entrar" class="btn btn-block btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 240px;
+    }
+
+    .form-container {
+        width: 35%;
+    }
+
+    .title {
+        margin-bottom: 32px;
+        font-weight: 300;
+        font-size: 24px;
+    }
+</style>

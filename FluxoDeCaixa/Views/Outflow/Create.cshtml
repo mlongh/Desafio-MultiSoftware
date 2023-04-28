@@ -1,44 +1,18 @@
-﻿@model FluxoDeCaixa.Models.ViewModels.OutflowFormViewModel
+﻿@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
-@{
-    ViewData["Title"] = "Adicionar saída";
-}
+@model FluxoDeCaixa.Models.ViewModels.OutflowFormViewModel
+
+@{ ViewData["Title"] = "Novo Saque"; }
 
 
-<h1 class="d-flex justify-content-between"><p>@ViewData["Title"]</p> 
-    Saldo:  </h1>
+<h1 class="d-flex justify-content-between">
+    @ViewData["Title"]
 
-@{
-    if (ViewBag.msg != null && ViewBag.msg != "")
-    {
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            Swal.fire({
-                title: '@ViewBag.msg',
-                text: '@ViewBag.text',
-                icon: 'error',
-                confirmButtonText: 'Ok'
-            })
+</h1>
 
-        </script>
-    }    
-    
-    if (ViewBag.msgMin != null && ViewBag.msgMin != "")
-    {
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            Swal.fire({
-                title: '@ViewBag.msgMin',
-                text: '@ViewBag.text',
-                icon: 'error',
-                confirmButtonText: 'Ok'
-            }).then((result) => {
-                window.location.href = '/Outflow';
-            })
-        </script>
-    }
 
-}
 
 <hr />
 <div class="row">
@@ -64,37 +38,86 @@
                 <input value="0" asp-for="Outflow.OutflowAmount" class="form-control" />
                 <span asp-validation-for="Outflow.OutflowAmount" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <select id="select" asp-for="Outflow.Person.Id" class="form-control">
-                    @foreach (var obj in Model.People)
-                    {
-                        <option value="@obj.Id" class="form-control">@obj.Name</option>
-                    }
-                </select>
-            </div>
+            @{ var person = JsonSerializer.Deserialize<Person>(HttpContextAccessor.HttpContext.Session.GetString("User"));
+                if (person.Id == 1)
+                {
 
-            <div class="form-group">
-                <input id="loginForm" type="submit" value="Adicionar" class="btn btn-primary"/>
+    <div class="form-group">
+        <label>Pessoa</label>
+        <select id="select" asp-for="Outflow.Person.Id" class="form-control">
+            @foreach (var obj in Model.People)
+            {
+<option value="@obj.Id" class="form-control">@obj.Name</option>
+}
+        </select>
+    </div> }
+else
+{
+<div class="form-group">
+
+    <select id="select" asp-for="Outflow.Person.Id" class="form-control" hidden>
+
+        <option value="@person.Id" class="form-control">@person.Name</option>
+    </select>
+</div> } }
+
+
+
+            <div class="d-flex">
+                <div class="m-1">
+                    <a class="btn btn-outline-primary " asp-action="Index"> Voltar</a>
+                </div>
+                <div class="form-group m-1">
+                    <input type="submit" value="Adicionar" class="btn btn-success" />
+                </div>
+
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Voltar</a>
-</div>
+@{ if (ViewBag.msg != null && ViewBag.msg != "")
+                {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" charset="UTF-8"></script>
+                    <script>
+            Swal.fire({
+                title: '@ViewBag.msg',
+                text: '@ViewBag.text',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: '#3B71CA',
+
+            })
+
+                    </script> }
+
+                                if (ViewBag.msgMin != null && ViewBag.msgMin != "")
+                                {
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" charset="UTF-8"></script>
+                                    <script>
+            Swal.fire({
+                title: '@ViewBag.msgMin',
+                
+                icon: 'warning',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: '#3B71CA',
+
+            }).then((result) => {
+                window.location.href = '/Outflow/Index';
+            })
+                                    </script> } }
 
 @*<script>
 
-    function Teste() {
-        debugger;
-        if (@Model.Outflow?.Person?.Balance - @Model.Outflow?.OutflowAmount < @Model.Outflow?.Person?.MinimumValue) {
-            alert('aaaaaaaaaa');
-        }
-
-        document.getElementById('form').onsubmit(
-            {
-
+        function Teste() {
+            debugger;
+            if (@Model.Outflow?.Person?.Balance - @Model.Outflow?.OutflowAmount < @Model.Outflow?.Person?.MinimumValue) {
+                alert('aaaaaaaaaa');
             }
-    }
-</script>*@
+
+            document.getElementById('form').onsubmit(
+                {
+
+                }
+        }
+    </script>*@

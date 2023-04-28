@@ -7,9 +7,19 @@
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    <h4>Saídas</h4>
+    <div class="d-flex justify-content-between">
+        <h4>Saque</h4>
+        <h4 class="primary"> Saldo atual: @Html.DisplayFor(model => model.Person.Balance)</h4>
+    </div>
     <hr />
     <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Person.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Person.Name)
+        </dd>
+
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Id)
         </dt>
@@ -34,11 +44,9 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.OutflowAmount)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Person.Name)
-        </dt>
+
     </dl>
 </div>
 <div>
-    <a asp-action="Index">Voltar</a>
+    <a class="btn btn-outline-primary" asp-action="Index">Voltar</a>
 </div>

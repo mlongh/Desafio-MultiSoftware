@@ -33,13 +33,28 @@ namespace FluxoDeCaixa.Repositories
 
         public IEnumerable<Person> FindAll() => _session.Query<Person>().ToList();
 
+        public string CountPeople()
+        {
+            var count = _session.Query<Person>().Count();
+            return count.ToString();
+        }
+
+        public List<Person> FindAllById(long id) => _session.Query<Person>().Where(x => x.Id == id).ToList();
+
         public List<Person> FindByName(string name)
         {
             var result = _session.Query<Person>().Where(p => p.Name == name);
 
             return result.ToList();
         }
-       
+
+        public Person FindByUsername(string username)
+        {
+
+            Person user = _session.Query<Person>().Where(u => u.Username == username).FirstOrDefault();
+
+            return user;
+        }
 
         public async Task<Person> FindByID(long id) => await _session.GetAsync<Person>(id);
 

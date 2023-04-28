@@ -19,7 +19,7 @@ namespace FluxoDeCaixa.Models
         [Display(Name = "Descrição")]
         public virtual string InflowDescription { get; set; }
 
-        [Display(Name = "Valor")]
+        [Display(Name = "Valor do depósito")]
         [DataType(DataType.Currency)]
         public virtual double InflowAmount { get; set; }
 

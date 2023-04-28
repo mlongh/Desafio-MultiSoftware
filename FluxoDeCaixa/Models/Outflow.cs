@@ -18,7 +18,7 @@ namespace FluxoDeCaixa.Models
         [Display(Name = "Descrição")]
         public virtual string OutflowDescription { get; set; }
         
-        [Display(Name = "Valor")]
+        [Display(Name = "Valor do saque")]
         [DataType(DataType.Currency)]
         public virtual double OutflowAmount { get; set; }
 

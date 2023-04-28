@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using FluxoDeCaixa.Models.ViewModels;
 using System.Threading.Tasks;
+using System.Globalization;
+using System.Text.Json;
+using FluentNHibernate.Testing.Values;
 
 namespace FluxoDeCaixa.Controllers
 {
@@ -14,16 +17,34 @@ namespace FluxoDeCaixa.Controllers
     {
         private readonly OutflowRepository outflowRepository;
         private readonly PersonRepository personRepository;
-        public OutflowController(NHibernate.ISession session)
+        private readonly Microsoft.AspNetCore.Http.IHttpContextAccessor _contxt;
+        public OutflowController(NHibernate.ISession session, Microsoft.AspNetCore.Http.IHttpContextAccessor contxt)
         {
             outflowRepository = new OutflowRepository(session);
             personRepository = new PersonRepository(session);
+            _contxt = contxt;
         }
 
         // GET: PersonController
         public ActionResult Index()
         {
-            return View(outflowRepository.FindAll().ToList());
+            var pessoa = JsonSerializer.Deserialize<Person>(_contxt.HttpContext.Session.GetString("User"));
+
+            if (pessoa.Id == 1)
+            {
+               
+                ViewBag.Total = outflowRepository.SumAmount().ToString("C2", CultureInfo.CurrentCulture);
+                ViewBag.Count = outflowRepository.CountAllOutflows();
+                return View(outflowRepository.FindAll().ToList());
+
+            }
+            else
+            {
+                ViewBag.Total = outflowRepository.SumAmount().ToString("C2", CultureInfo.CurrentCulture);
+                ViewBag.Count = outflowRepository.CountUserOutflows(pessoa.Id);
+                return View(outflowRepository.FindAllById(pessoa.Id).ToList());
+            }
+            //return View(outflowRepository.FindAll().ToList());
         }
 
 
@@ -31,6 +52,13 @@ namespace FluxoDeCaixa.Controllers
         public ActionResult SearchFilter(Filter filter)
         {
             var returnFilter = outflowRepository.SearchFilter(filter);
+            double sum = 0;
+            foreach (var outflow in returnFilter)
+            {
+                sum += outflow.OutflowAmount;
+            }
+            ViewBag.Total = sum.ToString("C2", CultureInfo.CurrentCulture);
+
             return View("Index", returnFilter.ToList());
         }
 
@@ -79,8 +107,8 @@ namespace FluxoDeCaixa.Controllers
 
             if (person.Balance < person.MinimumValue)
             {
-                ViewBag.msgMin = "Saldo abaixo do mínimo";
-                ViewBag.text = "Saldo abaixo do mínimo cadastrado";
+                ViewBag.msgMin = "Cuidado! Saldo abaixo do mínimo seguro em conta. Mesmo assim a operacao será relizada.";
+                ViewBag.text = "Mesmo assim a operacao será relizada.";
                 OutflowFormViewModel outflowFormViewModel = new OutflowFormViewModel() { };
                 outflowFormViewModel.People = personRepository.FindAll().ToList();
                 await outflowRepository.Add(outflow);
@@ -91,6 +119,36 @@ namespace FluxoDeCaixa.Controllers
             await outflowRepository.Add(outflow);
             await personRepository.Update(person);
             return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Edit(long? id)
+        {
+            if (id == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+            Outflow outflow = await outflowRepository.FindByID(id.Value);
+            if (outflow == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+
+            return View(outflow);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(
+        [Bind("Id, OutDate, OutDescription, OutflowAmount")]
+            Outflow outflow)
+        {
+            if (ModelState.IsValid)
+            {
+                await outflowRepository.Update(outflow);
+                return RedirectToAction("Index");
+            }
+
+            return View(outflow);
         }
 
         // GET: PersonController/Delete/5

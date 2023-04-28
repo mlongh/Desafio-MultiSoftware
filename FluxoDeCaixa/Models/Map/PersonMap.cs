@@ -62,7 +62,26 @@ namespace FluxoDeCaixa.Models.Map
                 x.NotNullable(true);
             });
 
+            Property(b => b.Username, x =>
+            {
+                x.Length(520);
+                x.Type(NHibernateUtil.String);
+                x.NotNullable(true);
+            });
+
+            Property(b => b.Password, x =>
+            {
+                x.Length(520);
+                x.Type(NHibernateUtil.String);
+                x.NotNullable(true);
+            });
+
             Table("Person");
+        }
+
+        private void HasMany<T>(Func<object, object> p)
+        {
+            throw new NotImplementedException();
         }
     }
 

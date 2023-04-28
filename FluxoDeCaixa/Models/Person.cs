@@ -33,11 +33,17 @@ namespace FluxoDeCaixa.Models
         [DataType(DataType.Currency)]
         public virtual double Balance { get; set; }
 
+        [Display(Name = "Nome de Usuário")]
+        public virtual string Username { get; set; }
+       
+        [Display(Name = "Senha")]
+        public virtual string Password { get; set; }
+
         public Person()
         {
         }
 
-        public Person(int id, string name, string email, double salary, double accountLimit, double minimumValue)
+        public Person(int id, string name, string email, double salary, double accountLimit, double minimumValue, string username, string password)
         {
             Id = id;
             Name = name;
@@ -45,6 +51,8 @@ namespace FluxoDeCaixa.Models
             Salary = salary;
             AccountLimit = accountLimit;
             MinimumValue = minimumValue;
+            Username = username;
+            Password = password;
         }
 
         

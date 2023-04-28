@@ -1,12 +1,14 @@
-﻿@model FluxoDeCaixa.Models.ViewModels.InflowFormViewModel
+﻿@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@model FluxoDeCaixa.Models.ViewModels.InflowFormViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Novo deposito";
 }
 
-<h1>Create</h1>
-
-<h4>Inflow</h4>
+<h1>@ViewData["Title"]</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -33,25 +35,40 @@
                 <span asp-validation-for="Inflow.InflowAmount" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <select asp-for="Inflow.Person.Id" class="form-control">
-                    @foreach (var obj in Model.People)
-                    {
+            @{ var person = JsonSerializer.Deserialize<Person>(HttpContextAccessor.HttpContext.Session.GetString("User"));
+                if (person.Id == 1)
+                {
 
-                        <option value="@obj.Id" class="form-control">@obj.Name</option>
+                    <div class="form-group">
+                        <label>Pessoa</label>
+                        <select id="select" asp-for="Inflow.Person.Id" class="form-control">
+                            @foreach (var obj in Model.People)
+                            {
+                                <option value="@obj.Id" class="form-control">@obj.Name</option>
+                            }
+                        </select>
+                    </div> }
+                else
+                {
+                    <div class="form-group">
 
-                    }
-                </select>
-            </div>
+                        <select id="select" asp-for="Inflow.Person.Id" class="form-control" hidden>
 
-                <div class="form-group">
-                    <input type="submit" value="Adicionar" class="btn btn-primary" />
+                            <option value="@person.Id" class="form-control">@person.Name</option>
+                        </select>
+                    </div> } }
+            <div class="d-flex">
+                <div class="m-1">
+                    <a class="btn btn-outline-primary " asp-action="Index"> Voltar</a>
                 </div>
-            </form>
+                <div class="form-group m-1">
+                    <input type="submit" value="Adicionar" class="btn btn-success" />
+                </div>
+
+            </div>
+        </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Voltar</a>
-</div>
+
 

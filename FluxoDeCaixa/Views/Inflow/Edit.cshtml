@@ -1,0 +1,40 @@
+﻿@model FluxoDeCaixa.Models.Inflow
+
+@{
+    ViewData["Title"] = "Editar";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Editar saque</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Id" class="form-control" hidden />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InflowDate" class="control-label"></label>
+                <input asp-for="InflowDate" class="form-control" />
+                <span asp-validation-for="InflowDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InflowDescription" class="control-label"></label>
+                <input asp-for="InflowDescription" class="form-control" />
+                <span asp-validation-for="InflowDescription" class="text-danger"></span>
+            </div>
+            <div class="d-flex ">
+                <div>
+                    <a class="btn btn-outline-primary m-1" asp-action="Index">Voltar</a>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Salvar" class="btn btn-success m-1" />
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

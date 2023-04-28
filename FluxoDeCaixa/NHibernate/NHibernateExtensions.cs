@@ -32,7 +32,7 @@ namespace FluxoDeCaixa.NHExtensions
 
             services.AddSingleton(sessionFactory);
             services.AddScoped(factory => sessionFactory.OpenSession());
-
+             
             return services;
         }
     }

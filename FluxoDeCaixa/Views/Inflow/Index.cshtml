@@ -6,18 +6,23 @@
 }
 
 @{
-    ViewData["Title"] = "Entradas";
+    ViewData["Title"] = "Depósitos";
 }
 
-<h1>@ViewData["Title"]</h1>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+<div class="d-flex justify-content-between align-items-center">
 
-<div class="d-flex justify-content-between">
-    <p>
-        <a asp-action="Create">Novo</a>
-    </p>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Filtros
-    </button>
+    <h1>@ViewData["Title"] (@ViewBag.Count)</h1>
+
+    <div class="d-flex justify-content-center">
+
+        <a asp-action="Create" class="d-flex btn btn-success justify-content-center align-items-center m-1"> <i class="bi bi-plus"></i>Novo </a>
+
+        <button type="button" class="btn btn-outline-primary m-1" data-toggle="modal" data-target="#exampleModal">
+            <i class="bi bi-funnel-fill"></i>
+        </button>
+    </div>
+</div>
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -45,9 +50,9 @@
                         <select id="select" asp-for="@filter.Periodo" class="form-control">
 
                             <option value="0" selected class="form-control">Todos</option>
-                            <option value="1"  class="form-control">Últimos 7 dias</option>
-                            <option value="2"  class="form-control">Últimos 15 dias</option>
-                            <option value="3"  class="form-control">Últimos 30 dias</option>
+                            <option value="1" class="form-control">Últimos 7 dias</option>
+                            <option value="2" class="form-control">Últimos 15 dias</option>
+                            <option value="3" class="form-control">Últimos 30 dias</option>
 
                         </select>
                         <input class="btn btn-primary btn-block mt-3" type="submit" value="Pesquisar" />
@@ -62,9 +67,7 @@
             </div>
         </div>
     </div>
-</div>
-<hr />
-
+<br />
 <table class="table table-hover">
     <thead>
         <tr>
@@ -108,10 +111,12 @@
                     @Html.DisplayFor(modelItem => item.Person.Balance)
                 </td>
 
-                <td>
+                <td class="d-flex justify-content-center align-items-center" >
 
-                    <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-                    <button asp-action="Delete" asp-route-id="@item.Id" class="btn btn-link disabled">Excluir</button>
+                    <a  class="btn-link m-1" asp-action="Edit" asp-route-id="@item.Id"> Editar </a> |
+                    
+                    <a class="btn-link m-1" asp-action="Details" asp-route-id="@item.Id"> Detalhes </a>
+                    @*<button asp-action="Delete" asp-route-id="@item.Id" class="btn btn-link disabled">Excluir</button>*@
                 </td>
             </tr>
 

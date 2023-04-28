@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.Text.Json;
 
 namespace FluxoDeCaixa.Controllers
 {
@@ -15,19 +15,37 @@ namespace FluxoDeCaixa.Controllers
     {
         private readonly InflowRepository inflowRepository;
         private readonly OutflowRepository outflowRepository;
-        public ReportController(NHibernate.ISession session)
+        private readonly Microsoft.AspNetCore.Http.IHttpContextAccessor _contxt;
+        public ReportController(NHibernate.ISession session, Microsoft.AspNetCore.Http.IHttpContextAccessor contxt)
         {
             inflowRepository = new InflowRepository(session);
             outflowRepository = new OutflowRepository(session);
+            _contxt = contxt;
         }
 
         // GET: ReportController
         public ActionResult Index()
         {
             ReportFormViewModel report = new ReportFormViewModel();
+            var pessoa = JsonSerializer.Deserialize<Person>(_contxt.HttpContext.Session.GetString("User"));
 
-            report.Inflow = inflowRepository.FindAll();
-            report.Outflow = outflowRepository.FindAll();
+            if (pessoa.Id == 1)
+            {
+                report.Inflow = inflowRepository.FindAll();
+                ViewBag.CountInflows = inflowRepository.CountAllInflows().ToString();
+                report.Outflow = outflowRepository.FindAll();
+                ViewBag.CountOutflows = outflowRepository.CountAllOutflows().ToString();
+
+
+            }
+            else
+            {
+                report.Inflow = inflowRepository.FindAllById(pessoa.Id);
+                ViewBag.CountInflows = inflowRepository.CountUserInflows(pessoa.Id); 
+                report.Outflow = outflowRepository.FindAllById(pessoa.Id);
+                ViewBag.CountOutflows = outflowRepository.CountUserOutflows(pessoa.Id);
+            }
+
 
             return View(report);
         }

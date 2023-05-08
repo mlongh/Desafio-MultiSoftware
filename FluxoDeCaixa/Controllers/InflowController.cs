@@ -39,7 +39,7 @@ namespace FluxoDeCaixa.Controllers
             }
             else
             {
-                ViewBag.Total = inflowRepository.SumAmount().ToString("C2", CultureInfo.CurrentCulture);
+                ViewBag.TotalUser = inflowRepository.SumAmountUser(pessoa.Id).ToString("C2", CultureInfo.CurrentCulture);
                 ViewBag.Count = inflowRepository.CountUserInflows(pessoa.Id);
                 return View(inflowRepository.FindAllById(pessoa.Id).ToList());
             }

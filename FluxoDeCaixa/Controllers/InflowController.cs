@@ -35,11 +35,10 @@ namespace FluxoDeCaixa.Controllers
                 ViewBag.Total = inflowRepository.SumAmount().ToString("C2", CultureInfo.CurrentCulture);
                 ViewBag.Count = inflowRepository.CountAllInflows();
                 return View(inflowRepository.FindAll().ToList());
-
             }
             else
             {
-                ViewBag.TotalUser = inflowRepository.SumAmountUser(pessoa.Id).ToString("C2", CultureInfo.CurrentCulture);
+                ViewBag.TotalUser = inflowRepository.SumAmount().ToString("C2", CultureInfo.CurrentCulture);
                 ViewBag.Count = inflowRepository.CountUserInflows(pessoa.Id);
                 return View(inflowRepository.FindAllById(pessoa.Id).ToList());
             }
@@ -58,8 +57,6 @@ namespace FluxoDeCaixa.Controllers
 
             return View("Index", returnFilter.ToList());
         }
-
-
 
         // GET: PersonController/Details/5
         public async Task<ActionResult> Details(long? id)

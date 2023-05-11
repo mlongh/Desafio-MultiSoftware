@@ -2,19 +2,17 @@
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
 
-@{
-    ViewData["Title"] = "Home Page";
-   
-}
+@{ ViewData["Title"] = "Home Page"; }
 
 <div class="text-center">
     @{ var person = JsonSerializer.Deserialize<Person>(HttpContextAccessor.HttpContext.Session.GetString("User"));
-        string name = person.Name;
+        string name = person.Name; }
 
-        }
-    
-    
-    
+
+
+
     <h1 class="display-4">Bem vindo(a) @name!</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<a class="btn btn-lg btn-primary" asp-area="" asp-controller="Person" asp-action="Index">teste</a>
